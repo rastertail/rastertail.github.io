@@ -1,14 +1,20 @@
 +++
 title = "BS-1: Breadboard Synthesizer"
-date = 2021-08-25
+date = 2021-09-01
 draft = true
 +++
 
-hewwo
+While I mainly focus on the software side of computers, I have always had an interest in the electrical engineering side too.
+So, after getting burnt out over some programming projects, I decided to try out something a bit different and build some sort of electronic circuit.
+I took inspiration from all the breadboard computers people have built, mostly inspired by Ben Eater, but I decided to take a different approach and built an analog synthesizer on breadboards instead.
 
 <!-- more -->
 
 ![A full image of BS-1](bs-1.jpg)
+This is BS-1, my breadboard synthesizer.
+It features a dual-rail power supply, a MIDI-to-CV converter, two oscillators, two LFOs, a noise source, a mixer, a filter capable of lowpass and bandpass, two ADSRs, and a VCA.
+Since I am no analog electronics expert by any means, none of these designs are original, and instead were taken from various places off the Internet.
+However, I want to write this article to explain how I picked out the designs, and how the build process went overall.
 
 ### Rules of the Game
 
@@ -92,12 +98,36 @@ It would be nice to have a less aggressive mode, but I guess that could come in 
 
 ### ADSRs
 
+I built two ADSR envelope generators using René Schmitz's [Fastest ADSR in the West](https://www.schmitzbits.de/adsr.html) design:
 ![An ADSR](eg.jpg)
+One is wired to the cutoff of the VCF, and the other is wired to the amplitude of the VCA.
+
+#### Construction Notes
+
+Squeezing these onto the breadboards was *extremely* difficult.
+It took two tries to really get it right, as on the first try, diodes were crossing everywhere, nearly shorting out.
+Luckily, once I sorted that out, construction was pretty straightforward.
+
+#### Caveats
+
+For some reason, even with the release set all the way down, the output does not fully shut off, and instead gets very low and then tapers off towards zero very slowly.
+This could be a construction error, as I had a bit of a hard time reading the capacitor values in the hand-drawn schematic.
+However, it could also just be a flaw of the design.
 
 ### VCA
 
+Finally, to complete the signal chain, we have a VCA using Henry Santana's dual JFET design:
 ![The VCA](vca.jpg)
+Originally published in [Electronic Design Magazine](https://www.electronicdesign.com/technologies/analog/article/21775122/op-amp-and-two-jfets-form-a-voltagecontrolled-amplifier), this design is about as simple as it gets, requiring only two JFETs, an op-amp, and a couple resistors.
+
+#### Rationale
+
+Most people online seem to recommend using a VCA chip such as the THAT2180, but would go against my rules for the project.
+It took a lot of searching, but I eventually came across this design, which performs amazingly well for how simple it is.
+It does require matched JFETs, but unlike what some people seem to claim, they do not need to be perfectly matched, and slight differences can be accounted for with a trimpot.
 
 ### The Rest
 
 ### Demo Video
+
+### Conclusion
