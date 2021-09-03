@@ -1,10 +1,9 @@
 +++
 title = "BS-1: Breadboard Synthesizer"
-date = 2021-09-01
-draft = true
+date = 2021-09-03
 +++
 
-While I mainly focus on the software side of computers, I have always had an interest in the electrical engineering side too.
+While I mainly focus on the software side of computers, I have always had an interest in electrical engineering too.
 So, after getting burnt out over some programming projects, I decided to try out something a bit different and build some sort of electronic circuit.
 I took inspiration from all the breadboard computers people have built, mostly inspired by Ben Eater, but I decided to take a different approach and built an analog synthesizer on breadboards instead.
 
@@ -12,7 +11,7 @@ I took inspiration from all the breadboard computers people have built, mostly i
 
 ![A full image of BS-1](bs-1.jpg)
 This is BS-1, my breadboard synthesizer.
-It features a dual-rail power supply, a MIDI-to-CV converter, two oscillators, two LFOs, a noise source, a mixer, a filter capable of lowpass and bandpass, two ADSRs, and a VCA.
+It features a dual-rail power supply, a MIDI-to-CV converter, two oscillators, two LFOs, a noise source, a mixer, a Polivoks VCF clone, two ADSRs, and a VCA.
 Since I am no analog electronics expert by any means, none of these designs are original, and instead were taken from various places off the Internet.
 However, I want to write this article to explain how I picked out the designs, and how the build process went overall.
 
@@ -24,6 +23,7 @@ Before I started picking out designs for components, I set up two simple rules t
 * Each module must fit on a standard 400-terminal breadboard
 
 I didn't want the project to be too easy, but I also did not want to spend 12 hours straight building a filter.
+These rules helped me meet that goal.
 
 ### VCOs
 
@@ -35,8 +35,9 @@ A genuis design based around the 4069 CMOS Hex Inverter, it provides both a saw 
 #### Rationale
 
 I was really attracted to the use of an inverter chip to create an oscillator, as to someone like me who is a relative beginner with analog electronics, it seems so esoteric.
+Generally, I would expect an inverter to be used in some digital circuit, not an analog waveform generator!
 I also liked the simplicity of the circuit, since that way it would fit on the single breadboard I wanted it on.
-Finally, PWM was a requirement to me, so I was happy to find out that simple circuits could provide it.
+Finally, PWM was a requirement to me, so I was happy to find out that simple circuits like this one could provide it.
 
 #### Construction Notes
 
@@ -62,7 +63,7 @@ I cannot even remember the exact website I got it off of as it is so ubiquitous.
 
 ### Mixer + Noise Source
 
-Another simple circuit: just a 3 channel summing mixer with a transistor breakdown white noise source:
+Another simple circuit: just a 3-channel summing mixer with a transistor breakdown white noise source:
 ![The mixer and noise source](mixer.jpg)
 This mixes together both of the oscillators and adds a little texture with the white noise before going off to the VCF.
 
@@ -105,8 +106,9 @@ One is wired to the cutoff of the VCF, and the other is wired to the amplitude o
 #### Construction Notes
 
 Squeezing these onto the breadboards was *extremely* difficult.
+While the circuit to generate the trigger pulse breadboarded very well, the rest was a total mess.
 It took two tries to really get it right, as on the first try, diodes were crossing everywhere, nearly shorting out.
-Luckily, once I sorted that out, construction was pretty straightforward.
+Luckily, I was able to figure out a much better layout, and now it is fairly neat.
 
 #### Caveats
 
@@ -116,7 +118,7 @@ However, it could also just be a flaw of the design.
 
 ### VCA
 
-Finally, to complete the signal chain, we have a VCA using Henry Santana's dual JFET design:
+To complete the main signal chain, we have a VCA using Henry Santana's dual JFET design:
 ![The VCA](vca.jpg)
 Originally published in [Electronic Design Magazine](https://www.electronicdesign.com/technologies/analog/article/21775122/op-amp-and-two-jfets-form-a-voltagecontrolled-amplifier), this design is about as simple as it gets, requiring only two JFETs, an op-amp, and a couple resistors.
 
@@ -128,6 +130,25 @@ It does require matched JFETs, but unlike what some people seem to claim, they d
 
 ### The Rest
 
+Lastly, there are two more components that I have not touched on yet: the power supply and the MIDI-to-CV converter.
+The power supply is the Goldpoint [VG-1](https://goldpt.com/virtual_ground.html) circuit, featuring some massive capacitors for smoothing.
+The MIDI-to-CV converter is based around Jan Ostman's [Good Ol' MIDI to CV](https://www.hackster.io/janost/diy-good-ol-midi-to-cv-d0e2bf) project.
+I made some slight modifications to the code as it handles stacked notes really strangely by default.
+For now I am going to leave those modifications private out of sheer laziness, but if anyone wants to see them, feel free to reach out and I can publish them.
+
 ### Demo Video
 
+Here is a quick video showing off some features of BS-1:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/--L100JvWc4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ### Conclusion
+
+In the end, I could not be happier with how this project turned out and how much I learned from it.
+I honestly did not expect to even be able to make it this far, as I have nearly no background in analog electronics.
+Though most of the project was glueing together existing designs, it still took a lot of effort and research to figure out which designs to use, how exactly to combine them, and how to modify them to fit my goals.
+I am thinking about how I could build another synthesizer, though I have no idea what it would look like yet.
+Maybe something more Buchla inspired?
+
+As a final note, I will be releasing a full song made exclusively with BS-1 at [Flashparty 2021](https://flashparty.rebelion.digital/index.php?lang=en).
+After that, the song will be available for download on my [Bandcamp](https://rytone64.bandcamp.com/).
