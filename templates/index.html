@@ -11,6 +11,7 @@
     <p>
         Hi!
         I'm a hobbyist programmer from Illinois with interests in realtime graphics, music, and retro hardware.
+        I am currently studying Computer Science at University of Wisconsin-Madison.
     </p>
 
     <p>
@@ -33,33 +34,6 @@
 <section>
     <h3 class="h-tab m-t2">Projects</h3>
     <article>
-        <h2 class="m-b0">sbvh-rs</h2>
-        <h4 class="m-t0 dim">[WIP] High performace SBVH builder written in Rust</h4>
-        <p>
-            Bounding volume hierarchies with spatial splits (described <a href="https://www.nvidia.in/docs/IO/77714/sbvh.pdf">here</a>) offer unparalleled performance in raytracing tasks.
-            However, constructing them is a notoriously expensive task.
-            While I do not expect to reach interactive rates, I am planning to leverage Rust's strong concurrency framework to reach performance similar to Intel's Embree kernel.
-            I am also taking inspiration from <a href="https://diglib.eg.org/handle/10.2312/pgv20161179">Parallel Spatial Splits in Bounding Volume Hierarchies</a> to guide the parallelization and optimization approaches.
-            Currently, I am focusing on building standard BVHs, but development pace has been strong, so once I nail down the performance on that, I will move on to spatial splits.
-        </p>
-        <p>
-            <a href="https://github.com/rytone/sbvh">Github</a>
-        </p>
-    </article>
-    <article>
-        <h2 class="m-b0">Manifold Tracing</h2>
-        <h4 class="m-t0 dim">[WIP] Generalized path sampling strategy for difficult light effects</h4>
-        <p>
-            This project is currently in very early planning stages, but I have high hopes for it.
-            The general idea is to use something akin to photon mapping to generate seed paths for specular manifold walks.
-            Furthermore, I believe it may be possible to generalize this to all light paths, not just specular ones, through the use of offset manifold walks, as the seeding strategy may produce paths convincing enough to converge well on non-specular events.
-            Much of this is still over my head, so nothing may pan out in the end, but the idea feels sound.
-        </p>
-        <p>
-            <a href="https://github.com/rytone/manifold-tracing">Github</a>
-        </p>
-    </article>
-    <article>
         <h2 class="m-b0">BS-1</h2>
         <h4 class="m-t0 dim">DIY breadboard analog synthesizer</h4>
         <p>
@@ -70,13 +44,35 @@
         </p>
     </article>
     <article>
+        <h2 class="m-b0">Global Manifold Sampling</h2>
+        <h4 class="m-t0 dim">[WIP] Generalized indirect lighting strategy for difficult light effects</h4>
+        <p>
+            My most ambitious project, an extension of <a href="https://rgl.epfl.ch/publications/Zeltner2020Specular">Specular Manifold Sampling</a> in order to improve convergence and overall performance
+            The general idea is to use a global seeding pass akin to photon mapping to generate seed paths and offsets for specular manifold walks.
+            This strategy has already shown promise in greatly improving constraint solver convergence rates.
+            However, I still need to sort out the details of calculating the probability density of the overall sampling process.
+        </p>
+    </article>
+    <article>
+        <h2 class="m-b0">sbvh-rs</h2>
+        <h4 class="m-t0 dim">[WIP] High performace SBVH builder written in Rust</h4>
+        <p>
+            Bounding volume hierarchies with spatial splits (described <a href="https://www.nvidia.in/docs/IO/77714/sbvh.pdf">here</a>) offer unparalleled performance in raytracing tasks.
+            However, constructing them is a notoriously expensive task.
+            While I do not expect to reach interactive rates, I am planning to leverage Rust's strong concurrency framework to reach performance similar to Intel's Embree kernel.
+            I am also taking inspiration from <a href="https://diglib.eg.org/handle/10.2312/pgv20161179">Parallel Spatial Splits in Bounding Volume Hierarchies</a> to guide the parallelization and optimization approaches.
+        </p>
+        <p>
+            <a href="https://github.com/rytone/sbvh">Github</a>
+        </p>
+    </article>
+    <article>
         <h2 class="m-b0">Mental</h2>
         <h4 class="m-t0 dim">[WIP] Experimental parallel incremental computation framework</h4>
         <p>
             Throughout some of my projects, I have run into the desire for an incremental computation framework in order to build more efficient applications.
             Current solutions like <a href="https://github.com/salsa-rs/salsa">salsa</a> and <a href="http://adapton.org/">Adapton</a> are nice, but they miss out on one feature: parallelism.
             I believe it should be possible to combine the best of both worlds and create an incremental computation framework that efficiently scales to multiple cores by leveraging the underlying graph structure of many large scale computations.
-            Unfortunately, this project has proven to be much tougher than I anticipate, so it only gets worked on when I get an occasional spark of inspiration.
         </p>
         <p>
             <a href="https://github.com/rytone/mental">Github</a>
@@ -90,7 +86,6 @@
             My goal was to create something that outperformed the current standard, <a href="https://github.com/corrscope/corrscope">corrscope</a>, both in video quality and raw performance.
             It leveraged a unique wave centering strategy based on the phase of the fundamental frequency of the wave.
             However, this did not work as well as I had hoped, and the program itself became an unmaintainable mess, so I eventually threw the idea out.
-            I am currently working on writing a more in-depth retrospective on the project.
         </p>
         <p>
             <a href="https://github.com/chiptunecafe/rawrscope">Github</a>
