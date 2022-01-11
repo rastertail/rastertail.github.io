@@ -1,4 +1,4 @@
-base_url = "https://ryt.one/"
+base_url = "https://rastertail.net/"
 compile_sass = true
 
 build_search_index = false
