@@ -151,4 +151,4 @@ I am thinking about how I could build another synthesizer, though I have no idea
 Maybe something more Buchla inspired?
 
 As a final note, I will be releasing a full song made exclusively with BS-1 at [Flashparty 2021](https://flashparty.rebelion.digital/index.php?lang=en).
-After that, the song will be available for download on my [Bandcamp](https://rytone64.bandcamp.com/).
+After that, the song will be available for download on my [Bandcamp](https://rastertail.bandcamp.com/).
