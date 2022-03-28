@@ -2,7 +2,12 @@
 {% extends "base.html" %}
 
 {% block meta %}
-<title>{{ page.title }} - Maxwell Beck</title>
+    <title>{{ page.title }} - Maxwell Beck</title>
+
+    <meta property="og:title" content="{{ page.title }}">
+    <meta property="og:description" content="Maxwell Beck">
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{ current_url }}">
 {% endblock meta %}
 
 {% block content %}
