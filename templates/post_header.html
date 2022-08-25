@@ -1,4 +1,4 @@
 {% macro render(page) %}
-    <h2 class="m-b0">{{ page.title }}</h2>
-    <h4 class="m-t0 dim">{{ page.date | date(format="%B %e, %Y") }} - {{ page.reading_time }} minute read</h4>
+<h2 class="m-b0">{{ page.title }}</h2>
+<h4 class="m-t0 dim">{{ page.date | date(format="%B %e, %Y") }} - {{ page.reading_time }} minute read</h4>
 {% endmacro render %}

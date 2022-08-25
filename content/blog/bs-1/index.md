@@ -10,6 +10,7 @@ I took inspiration from all the breadboard computers people have built, mostly i
 <!-- more -->
 
 ![A full image of BS-1](bs-1.jpg)
+
 This is BS-1, my breadboard synthesizer.
 It features a dual-rail power supply, a MIDI-to-CV converter, two oscillators, two LFOs, a noise source, a mixer, a Polivoks VCF clone, two ADSRs, and a VCA.
 Since I am no analog electronics expert by any means, none of these designs are original, and instead were taken from various places off the Internet.
@@ -28,7 +29,9 @@ These rules helped me meet that goal.
 ### VCOs
 
 For the oscillators, I chose the [VCO 4069](https://www.schmitzbits.de/vco4069.html) design by René Schmitz:
+
 ![A VCO](vco.jpg)
+
 A genuis design based around the 4069 CMOS Hex Inverter, it provides both a saw and a PWM output.
 
 
@@ -56,7 +59,9 @@ Given that I built this circuit twice, I don't think I made an error in construc
 ### LFOs
 
 To get a little modulation going, I built two simple op-amp relaxation LFOs:
+
 ![The LFOs](lfo.jpg)
+
 These are hardwired to the PWM input of each oscillator and the filter cutoff.
 Not much to say about these since it is such a simple circuit.
 I cannot even remember the exact website I got it off of as it is so ubiquitous.
@@ -64,7 +69,9 @@ I cannot even remember the exact website I got it off of as it is so ubiquitous.
 ### Mixer + Noise Source
 
 Another simple circuit: just a 3-channel summing mixer with a transistor breakdown white noise source:
+
 ![The mixer and noise source](mixer.jpg)
+
 This mixes together both of the oscillators and adds a little texture with the white noise before going off to the VCF.
 
 #### Construction Notes
@@ -79,7 +86,9 @@ Not sure if that issue comes down to not using the right value resistor on the t
 ### VCF
 
 Here is the real star of the show, the Polivoks VCF clone:
+
 ![The Polivoks VCF](vcf.jpg)
+
 This design comes from [Dave Brown](https://modularsynthesis.com/kuzmin/polivoks/polivoks_vcf.htm), which in turn is a modified version of Marc Bareille's design, using NTE888M op-amps as a replacement for the original Soviet ones.
 
 #### Rationale
@@ -100,7 +109,9 @@ It would be nice to have a less aggressive mode, but I guess that could come in 
 ### ADSRs
 
 I built two ADSR envelope generators using René Schmitz's [Fastest ADSR in the West](https://www.schmitzbits.de/adsr.html) design:
+
 ![An ADSR](eg.jpg)
+
 One is wired to the cutoff of the VCF, and the other is wired to the amplitude of the VCA.
 
 #### Construction Notes
@@ -119,7 +130,9 @@ However, it could also just be a flaw of the design.
 ### VCA
 
 To complete the main signal chain, we have a VCA using Henry Santana's dual JFET design:
+
 ![The VCA](vca.jpg)
+
 Originally published in [Electronic Design Magazine](https://www.electronicdesign.com/technologies/analog/article/21775122/op-amp-and-two-jfets-form-a-voltagecontrolled-amplifier), this design is about as simple as it gets, requiring only two JFETs, an op-amp, and a couple resistors.
 
 #### Rationale

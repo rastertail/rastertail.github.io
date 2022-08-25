@@ -1,11 +1,11 @@
 {% import "post_header.html" as post_header %}
 
 {% macro render(page) %}
-    <article>
-        {{ post_header::render(page=page) }}
-        <p>
-            {{ page.summary | safe }}
-        </p>
-        <a href="{{ page.permalink | safe }}">Read more...</a>
-    </article>
+<article>
+    {{ post_header::render(page=page) }}
+    <p>
+        {{ page.summary | safe }}
+    </p>
+    <a href="{{ page.permalink | safe }}">Read more...</a>
+</article>
 {% endmacro render %}

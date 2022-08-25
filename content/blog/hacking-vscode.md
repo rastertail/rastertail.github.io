@@ -3,6 +3,8 @@ title = "Hacking VS Code for On-the-Fly Environment Switching"
 date = 2022-03-27
 +++
 
+**Note: This technique no longer works as of VS Code 1.66, presumably due to the upgrade to Electron 17! I intend to find a new solution, but it is not planned any time soon.**
+
 In my day-to-day development workflows, I make heavy use of [Nix Flakes](https://nixos.wiki/wiki/Flakes); particularly, the development shell feature where I can make a special, reproducable development environment for each of my projects.
 To enter a flake environment, you use the `nix develop` command, which interacts great with terminal editors like Vim.
 However, I have recently switched over to using VS Code for my heavy-duty programming, and launching it from a terminal after running `nix develop` is not the smoothest workflow.

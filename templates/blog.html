@@ -2,18 +2,18 @@
 {% extends "base.html" %}
 
 {% block meta %}
-    <title>Blog - Maxwell Beck</title>
+<title>Blog - Maxwell Beck</title>
 
-    <meta property="og:title" content="Maxwell Beck">
-    <meta property="og:type" content="blog" />
-    <meta property="og:url" content="{{ current_url }}">
+<meta property="og:title" content="Maxwell Beck">
+<meta property="og:type" content="blog" />
+<meta property="og:url" content="{{ current_url }}">
 {% endblock meta %}
 
 {% block content %}
-    <section>
-        <h1 class="m-t2">Maxwell Beck</h1>
-        {% for page in section.pages %}
-            {{ post_preview::render(page=page) }}
-        {% endfor %}
-    </section>
+<section>
+    <h1>Maxwell Beck</h1>
+    {% for page in section.pages %}
+    {{ post_preview::render(page=page) }}
+    {% endfor %}
+</section>
 {% endblock content %}

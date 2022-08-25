@@ -1,65 +1,92 @@
 $color-fg: #000;
-$color-bg: #fff;
+$color-bg: #eee;
 $color-dim: #aaa;
 $color-acc1: #2f6690;
 $color-acc2: #468dc3;
+
+@font-face {
+    font-family: "Public Sans";
+    src: url("/fonts/PublicSans-VariableFont_wght.ttf");
+}
+
+@font-face {
+    font-family: "Public Sans";
+    font-style: italic;
+    src: url("/fonts/PublicSans-Italic-VariableFont_wght.ttf");
+}
+
+@font-face {
+    font-family: "Inconsolata";
+    src: url("/fonts/Inconsolata-VariableFont_wdth,wght.ttf");
+}
+
 html {
     font-size: 16px;
 }
 
 body {
     background: $color-bg;
-    font-family: 'PT Sans', sans-serif;
+    font-family: "Public Sans", sans-serif;
     font-weight: 400;
-    line-height: 1.75;
+    line-height: 2rem;
     color: $color-fg;
-    
+
     margin: 1rem;
+    margin-bottom: 8rem;
+
+    max-width: 60rem;
 }
 
 section {
-    max-width: 40em;
+    max-width: 40rem;
     margin: auto;
 }
 
-h1, h2, h3, h4, h5 {
-    font-family: 'Overpass', sans-serif;
-    font-weight: 700;
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-weight: 600;
 
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
 }
 
 h1 {
-    font-size: 2.8125em;
-    line-height: 3.5rem;
+    font-size: 2.7917rem;
+    line-height: 4rem;
 }
 
 h2 {
-    font-size: 2rem;
-    line-height: 3.5rem;
+    font-size: 1.8333rem;
+    line-height: 3rem;
 }
 
 h3 {
     font-size: 1.4375rem;
-    line-height: 1.75rem;
+    line-height: 2rem;
 }
 
-h4, h5 {
-    font-size: 1rem;
-    line-height: 1.75rem;
+h4 {
+    font-size: 1.2083rem;
+    line-height: 2rem;
+}
+
+h5 {
+    font-size: 1.1458rem;
+    line-height: 2rem;
 }
 
 p {
     margin-top: 0;
-    margin-bottom: 1.75rem;
+    margin-bottom: 2rem;
 }
 
 a {
-    font-weight: 700;
+    font-weight: 600;
     color: $color-acc1;
     text-decoration: none;
-    border-bottom: 3px solid;
     transition: color 0.2s;
 }
 
@@ -71,122 +98,42 @@ a:hover {
     color: $color-dim;
 }
 
+.caption {
+    font-size: 0.8958em;
+    color: $color-dim;
+    font-style: italic;
+}
+
 .m-t0 {
     margin-top: 0;
-}
-
-.m-t1 {
-    margin-top: 1.75rem;
-}
-
-.m-t2 {
-    margin-top: 3.5rem;
 }
 
 .m-b0 {
     margin-bottom: 0;
 }
 
-.m-b1 {
-    margin-bottom: 1.75rem;
-}
-
-.m-b2 {
-    margin-bottom: 3.5rem;
-}
-
-ul, ol {
-    margin-top: 1.75rem;
-    margin-bottom: 1.75rem;
+ul,
+ol {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 img {
     width: 100%;
-    margin-top: 1.75em;
-    margin-bottom: 1.75em;
-}
-
-.h-tab {
-  color: $color-bg;
-  width: max-content;
-
-  position: relative;
-  z-index: 1;
-}
-
-.h-tab::before {
-    content: "";
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    left: -1.5rem;
-    width: calc(100% + 2rem);
-    height: 1.75rem;
-    background: $color-fg;
-}
-
-button {
-    background: #eaeaea;
-    border: none;
-    line-height: 1.75rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    transition: background 0.1s;
-}
-
-button:hover {
-    background: #f1f1f1;
-}
-
-button:active {
-    background: #e0e0e0;
 }
 
 code {
-    background: #f1f1f1;
+    background: #fff;
     font-family: Inconsolata, monospace;
 }
 
 pre {
-    padding: 1.75rem;
+    padding: 2rem;
+    margin: 0;
+    margin-bottom: 2rem;
     overflow: auto;
 }
 
-pre > code {
+pre>code {
     background: inherit;
-}
-
-// Comments
-.schnack-comments {
-    padding-left: 2rem;
-    border-left: solid #f5f5f5 1rem;
-    list-style: none;
-}
-
-.schnack-author {
-    display: block;
-}
-
-.schnack-author > a {
-    border: none;
-}
-
-.schnack-date > a {
-    border: none;
-}
-
-.schnack-body {
-    width: 100%;
-
-    margin-top: 0.8125rem;
-    margin-left: 0;
-    margin-right: 0;
-}
-
-textarea.schnack-body {
-    height: 8rem;
-}
-
-.schnack-reply {
-    margin-bottom: 1.75rem;
 }

@@ -2,131 +2,43 @@
 {% extends "base.html" %}
 
 {% block meta %}
-    <title>Maxwell Beck</title>
+<title>Maxwell Beck</title>
 
-    <meta property="og:title" content="Maxwell Beck">
-    <meta property="og:type" content="blog" />
-    <meta property="og:url" content="{{ current_url }}">
+<meta property="og:title" content="Maxwell Beck">
+<meta property="og:type" content="blog" />
+<meta property="og:url" content="{{ current_url }}">
 {% endblock %}
 
 {% block content %}
-<section>
-    <h1 class="m-t2">Maxwell Beck</h1>
+<section class="vcenter">
+    <h1>Maxwell Beck</h1>
+
     <p>
         Hi!
-        I'm a hobbyist programmer from Illinois with interests in realtime graphics, music, and retro hardware.
+        I'm a programmer from Illinois with interests in computer graphics, music, and retro hardware.
         I am currently studying Computer Science at University of Wisconsin-Madison.
     </p>
 
     <p>
+        Feel free to check out my
+        <a href="https://raw.githubusercontent.com/rastertail/resume/master/Resume.pdf">résumé</a>
+        and <a href="/blog">blog</a>, or reach me elsewhere with the links at the bottom of the page.
+    </p>
+
+    <p>
+        <a href="https://files.scene.org/view/parties/2022/revision22/4k-executable-graphics/caustic-dreams.zip">
+            <img src="/caustic-dreams.png">
+        </a>
+        <span class="caption">Showcase: Caustic Dreams, 4kb procedural image</span>
+    </p>
+
+    <p class="dim">
         <a href="mailto:max@rastertail.net">Email</a>
+        &bull;
         <a href="https://github.com/rastertail">Github</a>
+        &bull;
         <a href="https://www.youtube.com/channel/UCVktJ-PN7Kw78R95xyuEYIQ">YouTube</a>
     </p>
 </section>
 
-<section>
-    <h3 class="h-tab m-t2">Latest Articles</h3>
-    
-    {% set section = get_section(path="blog/_index.md") %}
-    {% for page in section.pages | slice(end=3) %}
-        {{ post_preview::render(page=page) }}
-    {% endfor %}
-
-</section>
-
-<section>
-    <h3 class="h-tab m-t2">Projects</h3>
-    <article>
-        <h2 class="m-b0">BS-1</h2>
-        <h4 class="m-t0 dim">DIY breadboard analog synthesizer</h4>
-        <p>
-            As a break from my programming endeavors, I built a simple analog synthesizer entirely on breadboards.
-            It features two René Schmitz VCO 4069s, a Polivoks VCF clone, and a Henry Santana JFET VCA, along with many utilities including a mixer, two LFOs, two ADSRs, and a simple MIDI-to-CV converter.
-            While the synthesizer itself is done, I am now working on building a sleek case for the whole setup.
-            After that, I will do a quick writeup on how I selected all the component designs and share some insight into the building process.
-        </p>
-    </article>
-    <article>
-        <h2 class="m-b0">Overvoltage</h2>
-        <h4 class="m-t0 dim">A Discord bot for playing HVSC tunes</h4>
-        <p>
-            Focusing more on my retro computer interests, I decided to code up a small Discord bot to play back music written for the Commodore 64.
-            It is based on the JDA Discord library and JSIDPlay2 SID playback library.
-            Right now it is very much a minimum viable product, but I plan to eventually expand it to have a few more features, like randomly shuffling tunes from specific artists.
-        </p>
-        <p>
-            <a href="https://github.com/rastertail/overvoltage">Github</a>
-        </p>
-    </article>
-    <article>
-        <h2 class="m-b0">Nix Flake Tools</h2>
-        <h4 class="m-t0 dim">A VS Code extension providing development tools for projects based on Nix Flakes</h4>
-        <p>
-            <a href="https://nixos.wiki/wiki/Flakes">Nix Flakes</a> are a powerful tool allowing for fully reproducable software build and development environments.
-            In my own workflows, I restrict most programming language toolchains to specialized per-project environments with them.
-            However, VS Code has lacked any sort of extension to interact and enter environments with them... until now!
-            This extension successfully overwrites the environment of the root VS Code process to provide deep environment integration with Nix Flakes.
-            However, it achieves this through obscene hacks that should never be used in production, so use at your own discretion!
-        </p>
-        <p>
-            <a href="https://github.com/rastertail/nix-flake-tools">Github</a>
-            <a href="/blog/hacking-vscode">Writeup</a>
-        </p>
-    </article>
-    <article>
-        <h2 class="m-b0">rawrscope</h2>
-        <h4 class="m-t0 dim">[Abandoned] Oscilloscope view tool written in Rust</h4>
-        <p>
-            rawrscope was an attempt at making a tool for generating oscilloscope views of audio files, typically from retro computers.
-            My goal was to create something that outperformed the current standard, <a href="https://github.com/corrscope/corrscope">corrscope</a>, both in video quality and raw performance.
-            It leveraged a unique wave centering strategy based on the phase of the fundamental frequency of the wave.
-            However, this did not work as well as I had hoped, and the program itself became an unmaintainable mess, so I eventually threw the idea out.
-        </p>
-        <p>
-            <a href="https://github.com/chiptunecafe/rawrscope">Github</a>
-        </p>
-    </article>
-</section>
-
-<section>
-    <h3 class="h-tab m-t2">Demoscene</h3>
-    <p>
-        As a manifestation of all my interests, I currently participate in the demoscene and am part of the demogroup 
-        <a href="https://onslaught.c64.org">Onslaught</a>.
-        You can find all of my releases on 
-        <a href="https://www.pouet.net/user.php?who=99339">Pouët</a>
-        and
-        <a href="https://csdb.dk/scener/?id=34429">CSDB</a>,
-        but I will put my most notable ones here too:
-    </p>
-
-    <article>
-        <h2 class="m-b0">Icosprites</h2>
-        <h4 class="m-t0 m-b0 dim">Commodore 64 One-File Demo - 10th @ CSDB Only Sprites Compo 2022</h4>
-        <img src="screenshots/icosprites.png" />
-        View on <a href="https://www.pouet.net/prod.php?which=91149">Pouët</a>, <a href="https://csdb.dk/release/?id=214850">CSDB</a>
-    </article>
-
-    <article>
-        <h2 class="m-b0">Eightfold</h2>
-        <h4 class="m-t0 m-b0 dim">Commodore 64 8K Demo - 8th @ CSDB Only Sprites Compo 2021</h4>
-        <img src="screenshots/eightfold.gif" />
-        View on <a href="https://www.pouet.net/prod.php?which=87761">Pouët</a>, <a href="https://csdb.dk/release/?id=198857">CSDB</a>
-    </article>
-
-    <article>
-        <h2 class="m-b0">Isometria</h2>
-        <h4 class="m-t0 m-b0 dim">Commodore 64 4K Intro - 8th @ Solskogen 2020 combined 64K/4K intro compo</h4>
-        <img src="screenshots/isometria.gif" />
-        View on <a href="https://www.pouet.net/prod.php?which=86219">Pouët</a>, <a href="https://csdb.dk/release/?id=193438">CSDB</a>
-    </article>
-
-    <article>
-        <h2 class="m-b0">The Night Shift</h2>
-        <h4 class="m-t0 m-b0 dim">4K Executable Graphics - 16th @ Revision 2020 executable graphics compo</h4>
-        <img src="screenshots/the_night_shift.jpg" />
-        View on <a href="https://www.pouet.net/prod.php?which=85283">Pouët</a>
-    </article>
-</section>
 {% endblock content %}

@@ -2,20 +2,20 @@
 {% extends "base.html" %}
 
 {% block meta %}
-    <title>{{ page.title }} - Maxwell Beck</title>
+<title>{{ page.title }} - Maxwell Beck</title>
 
-    <meta property="og:title" content="{{ page.title }}">
-    <meta property="og:description" content="Maxwell Beck">
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="{{ current_url }}">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="Maxwell Beck">
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{ current_url }}">
 {% endblock meta %}
 
 {% block content %}
-    <section>
-        <h1 class="m-t2">Maxwell Beck</h1>
-        <article>
-            {{ post_header::render(page=page) }}
-            {{ page.content | safe }}
-        </article>
-    </section>
+<section>
+    <h1>Maxwell Beck</h1>
+    <article>
+        {{ post_header::render(page=page) }}
+        {{ page.content | safe }}
+    </article>
+</section>
 {% endblock content %}
