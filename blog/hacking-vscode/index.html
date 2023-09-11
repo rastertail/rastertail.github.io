@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+<title>Hacking VS Code for On-the-Fly Environment Switching - Maxwell Beck</title>
+
+<meta property="og:title" content="Hacking VS Code for On-the-Fly Environment Switching">
+<meta property="og:description" content="Maxwell Beck">
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https:&#x2F;&#x2F;rastertail.net&#x2F;blog&#x2F;hacking-vscode&#x2F;">
+
+
+    <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+    
+<section>
+    <h1>Maxwell Beck</h1>
+    <article>
+        
+<h2 class="m-b0">Hacking VS Code for On-the-Fly Environment Switching</h2>
+<h4 class="m-t0 dim">March 27, 2022 - 6 minute read</h4>
+
+        <p><strong>Note: This technique no longer works as of VS Code 1.66, presumably due to the upgrade to Electron 17! I intend to find a new solution, but it is not planned any time soon.</strong></p>
+<p>In my day-to-day development workflows, I make heavy use of <a href="https://nixos.wiki/wiki/Flakes">Nix Flakes</a>; particularly, the development shell feature where I can make a special, reproducable development environment for each of my projects.
+To enter a flake environment, you use the <code>nix develop</code> command, which interacts great with terminal editors like Vim.
+However, I have recently switched over to using VS Code for my heavy-duty programming, and launching it from a terminal after running <code>nix develop</code> is not the smoothest workflow.
+In order to comfortably use VS Code every day, I had to find a better solution.</p>
+<span id="continue-reading"></span>
+<p>Existing VS Code extensions like Roman Valihura's <a href="https://github.com/arrterian/nix-env-selector">Nix Environment Selector</a> let you switch into environments defined by Nix shells without flakes, but nothing had been developed for flakes... until now!
+I've been working on an extension, <a href="https://github.com/rastertail/nix-flake-tools">Nix Flake Tools</a>, which provides functionality to <em>fully replace</em> VS Code's environment with that of a Nix flake development shell, something never seen before.
+To achieve this, though, I pulled off some incredibly disgusting hacks, which ultimately are the motivation for this article.</p>
+<h3 id="prior-art-nix-environment-selector">Prior Art: Nix Environment Selector</h3>
+<p>Of course, the obvious solution to this environment-switching conundrum would be to simply extend Nix Environment Selector to support flake-based development shells.
+However, I decided the prospect of an extension with deeper flake integrations than just development shells would be more interesting, so I started looking into developing my own extension, potentially borrowing some techniques from Nix Environment Selector.
+So, let's take a look at how Nix Environment Selector goes about setting environment variables:</p>
+<pre data-lang="clojure" style="background-color:#2b303b;color:#c0c5ce;" class="language-clojure "><code class="language-clojure" data-lang="clojure"><span>(</span><span style="color:#b48ead;">defn </span><span style="color:#8fa1b3;">set-current-env </span><span>[env-vars]
+</span><span>  (</span><span style="color:#bf616a;">mapv </span><span>(</span><span style="color:#b48ead;">fn </span><span>[[name value]]
+</span><span>          (</span><span style="color:#bf616a;">aset</span><span> js/process.env name value))
+</span><span>        env-vars))
+</span></code></pre>
+<p>Despite being written in ClojureScript, it's pretty easy to tell what is going on here: The extension simply overwrites values in <code>process.env</code>, which in turn sets environment variables on VS Code's extension host process.
+In theory, this makes sense, as much of VS Code's functionality exists as internal extensions, so setting environment variables on that should set the environment for much of the application.
+In practice, though, it... does not work.
+Admittedly, I never actually tried using Nix Environment Selector, so maybe it works, and I'm missing a key step, so if that's the case, let me know!
+In my own extension, though, I found that setting values on <code>process.env</code> had no immediate effect on extensions like rust-analyzer, and reloading the workspace would end up restarting the extension host, resetting all of my changes.</p>
+<p>Either way, this approach comes with some drawbacks.
+Namely, it definitely <a href="https://github.com/arrterian/nix-env-selector/issues/31">doesn't influence the built-in terminal</a>, nor does it <a href="https://github.com/arrterian/nix-env-selector/issues/55">work in build tasks</a>.
+Personally, this doesn't quite cut it for my workflows, so I had to start looking for other solutions.</p>
+<h3 id="the-blessed-solution">The Blessed Solution</h3>
+<p>Luckily, I'm not the only person in the world who wants to influence the environment VS Code runs under on the fly.
+Thus, after <a href="https://github.com/microsoft/vscode/issues/46696#issuecomment-558733819">rejecting modifying extension environments</a>, the VS Code team implemented an <code>EnvironmentVariableCollection</code> API, which allows changing the environment of the built-in terminal, as well as certain task types.
+In my experience, this worked for what it is designed to do, but for my workflows, that just was not enough.
+Critically, since I restrict most language toolchains to Nix development environments, extensions need to see the modified <code>PATH</code> to pick up toolchain executables.
+Theoretically, combining this API with the previous approach could cover most of my use cases, but again, I could not get <code>process.env</code> to actually achieve anything useful, so I had to keep searching.</p>
+<h3 id="a-crime-against-software">A Crime Against Software</h3>
+<p>At this point, I was desparately searching StackOverflow for answers on how to modify the environment of a running process.
+Finally, I came across <a href="https://stackoverflow.com/a/211064">an answer</a> which suggested attaching to a process with <code>gdb</code> and calling <code>putenv</code>.
+To quote the author of the reposnse, Andrew, <em>This is quite a nasty hack and should only be done in the context of a debugging scenario, of course.</em>
+That got me thinking though... does NodeJS have a debugger I can attach to VS Code?</p>
+<p>...Yes. It does.</p>
+<p>I tried for myself, running <code>node inspect</code> with the PID of VS Code's root process, entered a REPL, and ran <code>process.env[&quot;PATH&quot;] = &quot;lol&quot;;</code>.
+Nervously, I reloaded the workspace in my VS Code instance, and just as I hoped, the <code>PATH</code> variable was successfully overwritten.
+Andrew's words echoed in the back of my mind... but my laughter drowned them out.
+So, how can we do this programatically?</p>
+<p>After digging around a bit, this ended up being <em>extremely</em> easy.
+To make a NodeJS process open to debugger connections, you simply send it <code>SIGUSR1</code>, or even easier, call <code>process._debugProcess(pid)</code> from another NodeJS process.
+Particularly, this opens a WebSocket server on port 9229 following the <a href="https://chromedevtools.github.io/devtools-protocol/">Chrome DevTools Protocol</a>.
+The protocol is simple enough that I could have written a client myself, but of course, there already exists <a href="https://www.npmjs.com/package/chrome-remote-interface">an NPM package</a> to do that for me.
+Anyway, VS Code makes this part extremely easy, as it already exports a <code>VSCODE_PID</code> environment variable, so I can just attach a debugger to that.
+At this point, all that remains is sending the right code over via the <code>Runtime.evaluate</code> command.
+The final code looks like this:</p>
+<pre data-lang="typescript" style="background-color:#2b303b;color:#c0c5ce;" class="language-typescript "><code class="language-typescript" data-lang="typescript"><span style="color:#b48ead;">export async function </span><span style="color:#8fa1b3;">injectEnvironment</span><span>(</span><span style="color:#bf616a;">vars</span><span>: Map&lt;string, string&gt;) {
+</span><span>    </span><span style="color:#65737e;">// Get root process from environment (thanks!)
+</span><span>    </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">rootProc </span><span>= </span><span style="color:#96b5b4;">parseInt</span><span>(process.env[&quot;</span><span style="color:#a3be8c;">VSCODE_PID</span><span>&quot;]!);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Start debug session on the root process
+</span><span>    (process </span><span style="color:#b48ead;">as </span><span>any).</span><span style="color:#8fa1b3;">_debugProcess</span><span>(</span><span style="color:#bf616a;">rootProc</span><span>);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Connect debugger
+</span><span>    </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">dbg </span><span>= </span><span style="color:#8fa1b3;">cdp</span><span>({ host: &quot;</span><span style="color:#a3be8c;">127.0.0.1</span><span>&quot;, port: </span><span style="color:#d08770;">9229 </span><span>});
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Apply environment variables
+</span><span>    </span><span style="color:#b48ead;">for </span><span>(</span><span style="color:#b48ead;">const </span><span>[</span><span style="color:#bf616a;">name</span><span>, </span><span style="color:#bf616a;">value</span><span>] of </span><span style="color:#bf616a;">vars</span><span>) {
+</span><span>        </span><span style="color:#65737e;">// Escape quotes and backslashes in variable values
+</span><span>        </span><span style="color:#bf616a;">value</span><span>.</span><span style="color:#96b5b4;">replace</span><span>(/</span><span style="color:#96b5b4;">\\</span><span>/</span><span style="color:#b48ead;">g</span><span>, &quot;</span><span style="color:#96b5b4;">\\\\</span><span>&quot;);
+</span><span>        </span><span style="color:#bf616a;">value</span><span>.</span><span style="color:#96b5b4;">replace</span><span>(/</span><span style="color:#96b5b4;">&quot;</span><span>/</span><span style="color:#b48ead;">g</span><span>, &#39;</span><span style="color:#96b5b4;">\\</span><span style="color:#a3be8c;">&quot;</span><span>&#39;);
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">await </span><span style="color:#bf616a;">dbg</span><span>.</span><span style="color:#bf616a;">Runtime</span><span>.</span><span style="color:#96b5b4;">evaluate</span><span>({
+</span><span>            expression: `</span><span style="color:#a3be8c;">process.env[&quot;${</span><span style="color:#bf616a;">name</span><span style="color:#a3be8c;">}&quot;] = &quot;${</span><span style="color:#bf616a;">value</span><span style="color:#a3be8c;">}&quot;;</span><span>`,
+</span><span>        });
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// Close debugger
+</span><span>    </span><span style="color:#b48ead;">await </span><span style="color:#bf616a;">dbg</span><span>.</span><span style="color:#96b5b4;">close</span><span>();
+</span><span>}
+</span></code></pre>
+<p>This achieves everything I want, successfully replacing the environment of the entire VS Code application after a workspace reload.
+In practice, I also inject some extra code to save the old environment so the user can restore it later, which also ends up a bit unusual, saving the copy of the environment as a global variable on the VS Code root process.
+Despite my success, though, this easily passes as the most horrific code I have ever written thus far, and I sincerely hope that nothing else surpasses it.</p>
+<p>The extension implementing this is available <a href="https://github.com/rastertail/nix-flake-tools">here</a>, though I hope to never publish it on the extension marketplace unless I can find a better way to approach the problem.
+You can still build the VSIX with <code>nix build github:rastertail/nix-flake-tools#vsix</code>, and the extension is also provided under the default <code>extension</code> package in a NixOS-friendly derivation.</p>
+<p>If you choose to use this in your own workflow, please remember Andrew's words.</p>
+
+    </article>
+</section>
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://rastertail.net/</loc>
+    </url>
+    <url>
+        <loc>https://rastertail.net/blog/</loc>
+    </url>
+    <url>
+        <loc>https://rastertail.net/blog/bs-1/</loc>
+        <lastmod>2021-09-03</lastmod>
+    </url>
+    <url>
+        <loc>https://rastertail.net/blog/hacking-vscode/</loc>
+        <lastmod>2022-03-27</lastmod>
+    </url>
+</urlset>
